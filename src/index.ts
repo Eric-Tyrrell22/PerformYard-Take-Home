@@ -1,5 +1,6 @@
 import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
+import { OpenAPIHono } from '@hono/zod-openapi'
+import { swaggerUI } from '@hono/swagger-ui'
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -25,15 +26,26 @@ const peopleRepo = new PeopleRepository(peopleData, artistsRepo);
 const peopleController = new PeopleController(peopleRepo);
 const artistsController = new ArtistsController(artistsRepo);
 
-const app = new Hono()
+const app = new OpenAPIHono()
+
+app.doc('/doc', {
+  openapi: '3.0.0',
+  info: {
+    version: '1.0.0',
+    title: 'PerformYard API',
+    description: 'API for managing artists and searching people',
+  },
+})
+
+app.get('/ui', swaggerUI({ url: '/doc' }))
 
 app.get('/', (c) => {
   return c.text('Hello Hono!')
 })
 
-app.get('/people/search', (c) => peopleController.search(c))
-
-app.post('/artists', (c) => artistsController.addArtist(c))
+// Register OpenAPI routes
+app.openapi(peopleController.searchRoute, peopleController.search)
+app.openapi(artistsController.addArtistRoute, artistsController.addArtist)
 
 serve({
   fetch: app.fetch,
