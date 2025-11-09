@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { PeopleRepository, ArtistsRepository } from '@/repositories';
 import { PeopleController, ArtistsController } from '@/controllers';
+import { searchPeopleRoute, addArtistRoute } from '@/routes';
 import type { Artists, Person } from '@/types';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -44,8 +45,8 @@ app.get('/', (c) => {
 })
 
 // Register OpenAPI routes
-app.openapi(peopleController.searchRoute, peopleController.search)
-app.openapi(artistsController.addArtistRoute, artistsController.addArtist)
+app.openapi(searchPeopleRoute, peopleController.search)
+app.openapi(addArtistRoute, artistsController.addArtist)
 
 serve({
   fetch: app.fetch,
