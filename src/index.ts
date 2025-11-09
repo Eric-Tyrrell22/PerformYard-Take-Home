@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { PeopleRepository, ArtistsRepository } from '@/repositories';
+import { PeopleController, ArtistsController } from '@/controllers';
 import type { Artists, Person } from '@/types';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,25 +21,19 @@ const peopleData: Person[] = JSON.parse(readFileSync(peoplePath, 'utf-8'));
 const artistsRepo = new ArtistsRepository(artistsData);
 const peopleRepo = new PeopleRepository(peopleData, artistsRepo);
 
+// Initialize controllers
+const peopleController = new PeopleController(peopleRepo);
+const artistsController = new ArtistsController(artistsRepo);
+
 const app = new Hono()
 
 app.get('/', (c) => {
   return c.text('Hello Hono!')
 })
 
-app.get('/people/search', (c) => {
-  const query = c.req.query('q');
+app.get('/people/search', (c) => peopleController.search(c))
 
-  if (!query) {
-    return c.json({ error: 'Query parameter "q" is required' }, 400);
-  }
-
-  const results = peopleRepo.search(query);
-
-  return c.json({
-    results: results
-  });
-})
+app.post('/artists', (c) => artistsController.addArtist(c))
 
 serve({
   fetch: app.fetch,

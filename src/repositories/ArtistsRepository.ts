@@ -12,14 +12,16 @@ export class ArtistsRepository {
    * Adds a new artist to a specific genre
    * @param genre The music genre
    * @param artist The artist name to add
+   * @throws Error if artist already exists in the genre
    */
   add(genre: string, artist: string): void {
     if (!this.artists[genre]) {
       this.artists[genre] = [];
     }
-    if (!this.artists[genre].includes(artist)) {
-      this.artists[genre].push(artist);
+    if (this.artists[genre].includes(artist)) {
+      throw new Error('Artist already exists in this genre');
     }
+    this.artists[genre].push(artist);
   }
 
 
