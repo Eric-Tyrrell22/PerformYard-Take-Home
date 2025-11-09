@@ -1,0 +1,31 @@
+{
+  "Rock": [
+    "Led Zeppelin",
+    "AC/DC",
+    "Rolling Stones"
+  ],
+  "Country": [
+    "Alabama",
+    "Rascal Flatts"
+  ],
+  "Classical": [
+    "Mozart",
+    "Bach",
+    "Chopin"
+  ],
+  "Jazz": [
+    "Miles Davis Quintet",
+    "Duke Ellington",
+    "Louis Armstrong"
+  ],
+  "Ska": [
+    "Sublime",
+    "Reel Big Fish",
+    "The Mighty Mighty Bosstones"
+  ],
+  "Blues": [
+    "John Mayer Trio",
+    "B.B. King",
+    "Eric Clapton"
+  ]
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Eddy Verde",
+    "musicGenres": ["Rock", "Country"],
+    "movies": ["Avatar", "The Good, the Bad and the Ugly"],
+    "location": "Florida"
+  },
+  {
+    "name": "Bonnie Wang",
+    "musicGenres": ["Classical"],
+    "movies": ["Lilo & Stitch", "Die Hard"],
+    "location": "Maryland"
+  },
+  {
+    "name": "Greta Heissenberger",
+    "musicGenres": ["Jazz", "Rock"],
+    "movies": ["The Departed", "M*A*S*H", "The Godfather"],
+    "location": "Massachusetts"
+  },
+  {
+    "name": "Justin Coker",
+    "musicGenres": ["Country"],
+    "movies": ["Raiders of the Lost Ark", "Apollo 13"],
+    "location": "South Carolina"
+  },
+  {
+    "name": "Jason Leo",
+    "musicGenres": ["Rock", "Ska"],
+    "movies": ["The Dark Knight", "Top Gun"],
+    "location": "Maine"
+  },
+  {
+    "name": "Doug Akridge",
+    "musicGenres": ["Rock", "Blues"],
+    "movies": ["Jurassic Park", "Cast Away", "Romeo + Juliet"],
+    "location": "Washington, D.C."
+  }
+]
