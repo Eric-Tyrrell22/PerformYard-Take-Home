@@ -24,8 +24,24 @@ export const searchPeopleRoute = createRoute({
         },
         example: 'rock',
       }),
-      sort: z.enum(sortableFields).optional(),
-      sortDir: z.enum(['ASC', 'DESC']).optional()
+      sort: z.enum(sortableFields).optional().openapi({
+        param: {
+          name: 'sort',
+          in: 'query',
+          required: false,
+        },
+        description: 'Field to sort results by',
+        example: 'name',
+      }),
+      sortDir: z.enum(['ASC', 'DESC']).optional().openapi({
+        param: {
+          name: 'sortDir',
+          in: 'query',
+          required: false,
+        },
+        description: 'Sort direction (ascending or descending)',
+        example: 'ASC',
+      })
     }),
   },
   responses: {
