@@ -4,6 +4,10 @@ import {
   SearchErrorResponseSchema
 } from '@/schemas';
 
+import {
+  sortableFields
+} from '../repositories/PeopleRepository';
+
 export const searchPeopleRoute = createRoute({
   method: 'get',
   path: '/people/search',
@@ -20,6 +24,8 @@ export const searchPeopleRoute = createRoute({
         },
         example: 'rock',
       }),
+      sort: z.enum(sortableFields).optional(),
+      sortDir: z.enum(['ASC', 'DESC']).optional()
     }),
   },
   responses: {
