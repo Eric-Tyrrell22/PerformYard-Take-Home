@@ -16,6 +16,27 @@ const searchConfig: Record<string, number> = {
   artists: 2
 } as const;
 
+export const sortableFields = ['name', 'score'] as const;
+export type PersonSortableFields = (typeof sortableFields)[number];
+const secondarySortMap: Record<PersonSortableFields, PersonSortableFields> = {
+  'name': 'score',
+  'score': 'name'
+}
+
+type SortDirs = 'ASC' | 'DESC'
+
+type SearchParams = {
+  query: string;
+  sort?: PersonSortableFields;
+  sortDir?: SortDirs;
+}
+
+type SortParams = {
+  results: PersonSearchResult[];
+  sort: PersonSortableFields;
+  sortDir: SortDirs;
+}
+
 export class PeopleRepository {
   private people: Person[] = [];
   private artistsRepo: ArtistsRepository;
@@ -33,7 +54,11 @@ export class PeopleRepository {
     this.people.push(person);
   }
 
-  search(query: string): PersonSearchResult[] {
+  search({
+    query,
+    sort = 'score',
+    sortDir =  'DESC'
+  }: SearchParams): PersonSearchResult[] {
     const results = this.people.map((person) => {
       const result: PersonSearchResult = {
         name: person.name,
@@ -62,15 +87,10 @@ export class PeopleRepository {
     })
 
     const filteredResults = results.filter(result => result.score > 0);
-    const sortedResults = filteredResults.sort((a, b) => {
-      if (b.score - a.score === 0) {
-        if (b.name === a.name) {
-          return 0;
-        }
-        return b.name > a.name ? 1 : -1;
-      }
-
-      return b.score - a.score
+    const sortedResults = this.getSortedResults({
+      results: filteredResults,
+      sort,
+      sortDir
     });
 
     return sortedResults;
@@ -84,4 +104,40 @@ export class PeopleRepository {
     }
     return false;
   }
+
+  private getSortedResults({
+    results,
+    sort,
+    sortDir
+  }: SortParams): PersonSearchResult[] {
+    function comparator<T extends string | number>(a: T, b: T) {
+      if(a === b) {
+        return 0;
+      }
+
+      return a > b ? 1 : -1;
+    }
+
+    const sortedResults = results.toSorted((a,b) => {
+      const aVal = a[sort];
+      const bVal = b[sort];
+      const secondarySortField = secondarySortMap[sort];
+      const primaryComparison = comparator(aVal, bVal)
+
+      if(primaryComparison === 0 && secondarySortField) {
+        const secondaryAVal = a[secondarySortField];
+        const secondaryBVal = b[secondarySortField];
+        const secondaryComparison = comparator(secondaryAVal, secondaryBVal);
+
+        return secondaryComparison;
+      }
+
+      const direction = sortDir === 'ASC' ? 1 : -1;
+      return primaryComparison * direction;
+    });
+
+    return sortedResults;
+  }
+
+
 }
